@@ -1,0 +1,21 @@
+[
+    {
+      "Id": 1,
+      "productName": "Bullar",
+      "price": 4.90,
+      "weight": 1,
+      "packSize": 2,
+      "BestBefore": "2025-03-18",
+      "ManufactureDate": "2025-03-16"
+    },
+    {
+      "Id": 2,
+      "productName": "Bröd",
+      "price": 25.00,
+      "weight": 2,
+      "packSize": 1,
+      "BestBefore": "2025-03-18",
+      "ManufactureDate": "2025-03-16"
+    }
+  ]
+  
