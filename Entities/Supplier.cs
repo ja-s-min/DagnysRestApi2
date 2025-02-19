@@ -14,5 +14,6 @@ namespace dagnys_api.Entities
         public string Email { get; set; }
 
          public IList<SupplierRawMaterial> SupplierRawMaterials { get; set; } = new List<SupplierRawMaterial>();
+         public IList<SupplierAddress> SupplierAddresses { get; set; } = [];
     }
 }

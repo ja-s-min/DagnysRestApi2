@@ -530,3 +530,4 @@ C:\Users\root\Desktop\DagnysRest-main\obj\Debug\net8.0\scopedcss\bundle\dagnys-a
 C:\Users\root\Desktop\DagnysRest-main\obj\Debug\net8.0\dagnys-api.csproj.Up2Date
 C:\Users\root\Desktop\DagnysRest-main\obj\Debug\net8.0\dagnys-api.genruntimeconfig.cache
 C:\Users\root\Desktop\DagnysRest-main\obj\Debug\net8.0\ref\dagnys-api.dll
+C:\Users\root\Desktop\DagnysRest-main\obj\Debug\net8.0\dagnys-api.sourcelink.json

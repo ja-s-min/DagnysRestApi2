@@ -1,12 +1,26 @@
 using Microsoft.EntityFrameworkCore;
 using dagnys_api;
 using dagnys_api.Data;
+using dagnys_api.Interfaces;
+using Microsoft.AspNetCore;
+using dagnys_api.Entities;
+using dagnys_api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>(options =>{
+//var serverVersion = new MySqlServerVersion(new Version(9, 1, 0));
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("Prod"));
     options.UseSqlite(builder.Configuration.GetConnectionString("DevConnection"));
 });
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
 builder.Services.AddControllers();
 

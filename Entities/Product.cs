@@ -9,4 +9,6 @@ public class Product
     public int PackSize { get; set; }
     public DateTime BestBefore { get; set; }
     public DateTime ManufactureDate { get; set; }
+
+    public IList<OrderItem> OrderItems { get; set; }
 }
