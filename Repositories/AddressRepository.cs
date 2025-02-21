@@ -12,15 +12,14 @@ namespace dagnys_api.Repositories
 {
     public class AddressRepository : IAddressRepository
     {
-        private readonly DataContext _context;
+    private readonly DataContext _context;
 
-        public AddressRepository(DataContext context)
+    public AddressRepository(DataContext context)
         {
             _context = context;
         }
 
-        
-        public async Task<Address> Add(AddressPostViewModel model)
+    public async Task<Address> Add(AddressPostViewModel model)
         {
             try
             {
@@ -67,7 +66,7 @@ namespace dagnys_api.Repositories
         }
 
         
-        public async Task<bool> Add(string type)
+public async Task<bool> Add(string type)
         {
             try
             {
@@ -75,7 +74,7 @@ namespace dagnys_api.Repositories
                     .FirstOrDefaultAsync(c => c.Value.ToLower() == type.ToLower());
 
                 if (exists != null) 
-                    throw new Exception($"Adress typen {type} finns redan");
+                    throw new Exception($"Adresstypen {type} finns redan");
 
                 var newType = new AddressType
                 {

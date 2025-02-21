@@ -13,6 +13,8 @@ namespace dagnys_api.Interfaces
     Task<Order> Find(int id);
     Task<bool> Add(Order order);
     Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate = null);
+    Task<IEnumerable<Order>> GetOrdersByCustomerId(int customerId);
+     Task<Order> FindWithDetails(int orderId);
     }
 
         

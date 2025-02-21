@@ -9,9 +9,7 @@ namespace dagnys_api.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        
-
-         public IList<SupplierRawMaterial> SupplierRawMaterials { get; set; } = new List<SupplierRawMaterial>();
+        public IList<SupplierRawMaterial> SupplierRawMaterials { get; set; } = new List<SupplierRawMaterial>();
       
     }
 }

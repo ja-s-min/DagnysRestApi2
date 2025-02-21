@@ -56,19 +56,15 @@ public async Task<IList<Order>> List(DateTime? orderDate = null)
 
     return await query.ToListAsync();
 }
-/*public async Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate = null)
-{
-    if (orderId.HasValue)
-    {
-        return await _context.Orders
-            .Where(o => o.OrderId == orderId.Value)
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .ToListAsync();
-    }
 
-    return await List(orderDate);
-}*/
+public async Task<IEnumerable<Order>> GetOrdersByCustomerId(int customerId)
+{
+    return await _context.Orders
+        .Where(o => o.CustomerId == customerId)
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .ToListAsync();
+}
 
 public async Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate = null)
 {
@@ -89,6 +85,15 @@ public async Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate 
     }
 
     return await query.ToListAsync();
+}
+
+public async Task<Order> FindWithDetails(int orderId)
+{
+    return await _context.Orders
+        .Include(o => o.Customer)
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .FirstOrDefaultAsync(o => o.OrderId == orderId);
 }
 
 }

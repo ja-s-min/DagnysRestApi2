@@ -57,6 +57,7 @@ public async Task<CustomerViewModel> Find(int id)
     try
     {
         var customer = await _context.Customers
+        .AsNoTracking()
             .Where(c => c.Id == id)
             .Include(c => c.CustomerAddresses)
                 .ThenInclude(c => c.Address)
@@ -64,7 +65,7 @@ public async Task<CustomerViewModel> Find(int id)
             .Include(c => c.CustomerAddresses)
                 .ThenInclude(c => c.Address)
                 .ThenInclude(c => c.AddressType)
-            .Include(c => c.Orders) // Hämtar kundens beställningar
+            .Include(c => c.Orders) 
                 .ThenInclude(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
             .SingleOrDefaultAsync();
@@ -123,6 +124,12 @@ public async Task<CustomerViewModel> Find(int id)
 
     return [.. customers];
   }
+
+public void Attach(Customer customer)
+{
+    _context.Customers.Attach(customer);
+    _context.Entry(customer).Property(c => c.ContactPerson).IsModified = true;
+}
 }
 
 

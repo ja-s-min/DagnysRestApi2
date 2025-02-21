@@ -5,7 +5,6 @@ using dagnys_api.Entities;
 using dagnys_api.ViewModels;
 
 namespace dagnys_api.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController(DataContext context) : ControllerBase
