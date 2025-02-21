@@ -1,5 +1,6 @@
 using System.Text.Json;
 using dagnys_api.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace dagnys_api.Data;
 
@@ -110,5 +111,115 @@ namespace dagnys_api.Data;
                 
             }
 
+public static async Task LoadAddressTypes(DataContext context)
+{
+    if (context.AddressTypes.Any()) return;
+
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+    var json = await File.ReadAllTextAsync("Data/json/addressTypes.json");
+    var types = JsonSerializer.Deserialize<List<AddressType>>(json, options);
+
+    if (types is not null && types.Count > 0)
+    {
+        await context.AddressTypes.AddRangeAsync(types);
+        await context.SaveChangesAsync();
     }
+}
+
+/*public static async Task LoadCustomers(DataContext context)
+{
+    if (context.Customers.Any()) return;
+
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+    try
+    {
+        var json = await File.ReadAllTextAsync("Data/json/customers.json");
+        var customers = JsonSerializer.Deserialize<List<CustomerPostViewModel>>(json, options);
+
+        if (customers != null && customers.Count > 0)
+        {
+            foreach (var customer in customers)
+            {
+                // Skapa en ny kund
+                var newCustomer = new Customer
+                {
+                    StoreName = customer.StoreName,
+                    Email = customer.Email,
+                    Phone = customer.Phone,
+                    ContactPerson = customer.ContactPerson
+                };
+
+                await context.Customers.AddAsync(newCustomer);
+
+                // Kontrollera om adresser finns och hantera varje adress
+                foreach (var address in customer.Addresses)
+                {
+                    if (address == null) continue; // Om adressen är null, hoppa över den
+
+                    // Kontrollera om postnummer finns i databasen
+                    PostalAddress postalAddress = null;
+                    if (!string.IsNullOrEmpty(address.PostalCode) && !string.IsNullOrEmpty(address.City))
+                    {
+                        postalAddress = await context.PostalAddresses
+                            .FirstOrDefaultAsync(c => c.PostalCode.Replace(" ", "").Trim() == address.PostalCode.Replace(" ", "").Trim());
+                    }
+
+                    if (postalAddress == null)
+                    {
+                        postalAddress = new PostalAddress
+                        {
+                            PostalCode = address.PostalCode.Replace(" ", "").Trim(),
+                            City = address.City.Trim()
+                        };
+                        await context.PostalAddresses.AddAsync(postalAddress);
+                    }
+
+                    // Kontrollera om adresslinjen redan finns
+                    Address customerAddress = null;
+                    if (!string.IsNullOrEmpty(address.AddressLine))
+                    {
+                        customerAddress = await context.Addresses
+                            .FirstOrDefaultAsync(c => c.AddressLine.Trim().ToLower() == address.AddressLine.Trim().ToLower());
+                    }
+
+                    if (customerAddress == null)
+                    {
+                        customerAddress = new Address
+                        {
+                            AddressLine = address.AddressLine,
+                            AddressTypeId = (int)address.AddressType,
+                            PostalAddress = postalAddress
+                        };
+
+                        await context.Addresses.AddAsync(customerAddress);
+                    }
+
+                    // Lägg till kundens adress
+                    newCustomer.CustomerAddresses.Add(new CustomerAddress
+                    {
+                        Address = customerAddress,
+                        Customer = newCustomer
+                    });
+                }
+
+                // Spara ändringarna för varje kund
+                await context.SaveChangesAsync();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+       
+    }
+}*/
+
+
+
+
+
+
+}
     

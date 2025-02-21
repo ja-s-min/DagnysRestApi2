@@ -46,6 +46,8 @@ await Seed.LoadRecipe(context);
 await Seed.LoadPurchase(context);
 await Seed.LoadRawMaterial(context);
 await Seed.LoadSupplierRawMaterial(context);
+await Seed.LoadAddressTypes(context);
+
 }
 catch (Exception ex)
 {Console.WriteLine("{0}", ex.Message);

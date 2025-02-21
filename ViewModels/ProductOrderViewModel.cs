@@ -12,3 +12,4 @@ namespace dagnys_api.ViewModels
         public double Price { get; set; }
     }
 }
+    

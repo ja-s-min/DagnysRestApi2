@@ -11,7 +11,7 @@ using dagnys_api.Data;
 namespace dagnys_api.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250219164518_InitialSqlite")]
+    [Migration("20250221084744_InitialSqlite")]
     partial class InitialSqlite
     {
         /// <inheritdoc />

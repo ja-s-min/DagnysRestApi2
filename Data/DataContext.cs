@@ -48,26 +48,4 @@ namespace dagnys_api.Data;
         modelBuilder.Entity<SupplierAddress>().HasKey(s => new { s.AddressId, s.SupplierId });
 
         
-        /*modelBuilder.Entity<Address>()
-            .HasOne(a => a.PostalAddress)
-            .WithMany()
-            .HasForeignKey(a => a.PostalAddressId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Address>()
-            .HasOne(a => a.AddressType)
-            .WithMany()
-            .HasForeignKey(a => a.AddressTypeId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        modelBuilder.Entity<Customer>()
-            .HasMany(c => c.CustomerAddresses)
-            .WithOne(ca => ca.Customer)
-            .HasForeignKey(ca => ca.CustomerId);
-
-        modelBuilder.Entity<Supplier>()
-            .HasMany(s => s.SupplierAddresses)
-            .WithOne(sa => sa.Supplier)
-            .HasForeignKey(sa => sa.SupplierId);*/
-        }
-}
+}}

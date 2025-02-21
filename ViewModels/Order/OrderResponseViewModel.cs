@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using dagnys_api.ViewModels.Customer;
+using dagnys_api.ViewModels;
 
 namespace dagnys_api.ViewModels.Order
 {

@@ -1,18 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using dagnys_api.ViewModels.Address;
+﻿using dagnys_api.ViewModels.Address;
 
-namespace dagnys_api.ViewModels.Customer
+namespace dagnys_api;
+
+public class CustomerViewModel : CustomerBaseViewModel
 {
-    public class CustomerViewModel
-    {
-        public int Id { get; set; }
-        public string StoreName { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string ContactPerson { get; set; }
-        public List<AddressViewModel> Addresses { get; set; }
-    }
+  public int Id { get; set; }
+  public IList<AddressViewModel> Addresses { get; set; }
 }

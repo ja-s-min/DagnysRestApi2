@@ -1,3 +1,5 @@
+using dagnys_api.ViewModels;
+
 namespace dagnys_api.ViewModels;
 
 public class ProductGetViewModel
