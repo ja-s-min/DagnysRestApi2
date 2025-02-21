@@ -56,5 +56,19 @@ namespace dagnys_api.Controllers
         var orders = await _unitOfWork.OrderRepository.List(orderDate);
         return Ok(new { success = true, data = orders });
     }
+
+    [HttpGet("search")]
+public async Task<ActionResult> SearchOrders([FromQuery] int? orderId, [FromQuery] DateTime? orderDate)
+{
+    try
+    {
+        var orders = await _unitOfWork.OrderRepository.Search(orderId, orderDate);
+        return Ok(new { success = true, data = orders });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { success = false, message = ex.Message });
+    }
+}
     }
 }

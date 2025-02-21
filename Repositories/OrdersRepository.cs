@@ -31,29 +31,66 @@ public class OrderRepository : IOrderRepository
     }
 
     
-    public async Task<Order> Find(int id)
+public async Task<Order> Find(int id)
+{
+    return await _context.Orders
+        .AsNoTracking()
+        .Include(o => o.Customer)
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .FirstOrDefaultAsync(o => o.OrderId == id);
+}
+
+public async Task<IList<Order>> List(DateTime? orderDate = null)
+{
+    var query = _context.Orders
+        .Include(o => o.Customer) 
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .AsQueryable();
+
+    if (orderDate.HasValue)
     {
-        return await _context.Orders
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
+        query = query.Where(o => o.OrderDate.Date == orderDate.Value.Date);
     }
 
-    
-    public async Task<IList<Order>> List(DateTime? orderDate = null)
+    return await query.ToListAsync();
+}
+/*public async Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate = null)
+{
+    if (orderId.HasValue)
     {
-        var query = _context.Orders.AsQueryable();
-
-        if (orderDate.HasValue)
-        {
-            query = query.Where(o => o.OrderDate.Date == orderDate.Value.Date);
-        }
-
-        return await query
+        return await _context.Orders
+            .Where(o => o.OrderId == orderId.Value)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .ToListAsync();
     }
+
+    return await List(orderDate);
+}*/
+
+public async Task<IList<Order>> Search(int? orderId = null, DateTime? orderDate = null)
+{
+    var query = _context.Orders
+        .Include(o => o.Customer) 
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .AsQueryable();
+
+    if (orderId.HasValue)
+    {
+        query = query.Where(o => o.OrderId == orderId.Value);
+    }
+
+    if (orderDate.HasValue)
+    {
+        query = query.Where(o => o.OrderDate.Date == orderDate.Value.Date);
+    }
+
+    return await query.ToListAsync();
+}
+
 }
 
         
