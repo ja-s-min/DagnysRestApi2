@@ -36,7 +36,7 @@ namespace dagnys_api.Controllers
     }
   }
 
-        [HttpPost]
+  [HttpPost]
         public async Task<ActionResult> AddCustomer([FromBody] CustomerPostViewModel model)
         {
             try

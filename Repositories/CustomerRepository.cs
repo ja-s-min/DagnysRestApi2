@@ -6,6 +6,7 @@ using dagnys_api.Entities;
 using dagnys_api.Interfaces;
 using dagnys_api.ViewModels.Address;
 using System.Collections.Generic;
+using dagnys_api.ViewModels;
 
 namespace dagnys_api.Repositories;
 public class CustomerRepository(DataContext context, IAddressRepository repo) : ICustomerRepository
@@ -51,51 +52,62 @@ public class CustomerRepository(DataContext context, IAddressRepository repo) : 
     }
   }
 
-  public async Task<CustomerViewModel> Find(int id)
-  {
-
+public async Task<CustomerViewModel> Find(int id)
+{
     try
     {
-      var customer = await _context.Customers
-        .Where(c => c.Id == id)
-        .Include(c => c.CustomerAddresses)
-          .ThenInclude(c => c.Address)
-          .ThenInclude(c => c.PostalAddress)
-        .Include(c => c.CustomerAddresses)
-          .ThenInclude(c => c.Address)
-          .ThenInclude(c => c.AddressType)
-        .SingleOrDefaultAsync();
+        var customer = await _context.Customers
+            .Where(c => c.Id == id)
+            .Include(c => c.CustomerAddresses)
+                .ThenInclude(c => c.Address)
+                .ThenInclude(c => c.PostalAddress)
+            .Include(c => c.CustomerAddresses)
+                .ThenInclude(c => c.Address)
+                .ThenInclude(c => c.AddressType)
+            .Include(c => c.Orders) // Hämtar kundens beställningar
+                .ThenInclude(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+            .SingleOrDefaultAsync();
 
-      if (customer is null)
-      {
-        throw new Exception($"Det finns ingen kund med id {id}");
-      }
+        if (customer is null)
+        {
+            throw new Exception($"Det finns ingen kund med id {id}");
+        }
 
-      var view = new CustomerViewModel
-      {
-        Id = customer.Id,
-        StoreName = customer.StoreName,
-        Email = customer.Email,
-        Phone = customer.Phone,
-        ContactPerson = customer.ContactPerson
-      };
-
-      var addresses = customer.CustomerAddresses.Select(c => new AddressViewModel
-      {
-        AddressLine = c.Address.AddressLine,
-        PostalCode = c.Address.PostalAddress.PostalCode,
-        City = c.Address.PostalAddress.City,
-        AddressType = c.Address.AddressType.Value
-      });
-
-      view.Addresses = [.. addresses];
-      return view;
+        var view = new CustomerViewModel
+        {
+            Id = customer.Id,
+            StoreName = customer.StoreName,
+            Email = customer.Email,
+            Phone = customer.Phone,
+            ContactPerson = customer.ContactPerson,
+            Addresses = customer.CustomerAddresses.Select(c => new AddressViewModel
+            {
+                AddressLine = c.Address.AddressLine,
+                PostalCode = c.Address.PostalAddress.PostalCode,
+                City = c.Address.PostalAddress.City,
+                AddressType = c.Address.AddressType.Value
+            }).ToList(),
+            Orders = customer.Orders.Select(o => new OrderViewModel
+            {
+                OrderDate = o.OrderDate,
+                CustomerId = customer.Id,
+                Products = o.OrderItems.Select(oi => new ProductOrderViewModel
+                {
+                    ProductId = oi.ProductId,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price
+                }).ToList()
+            }).ToList()
+        };
+        
+        return view;
     }
     catch (Exception ex)
     {
-      throw new Exception(ex.Message);
+        throw new Exception(ex.Message);
     }
-  }
+}
 
   public async Task<IList<CustomersViewModel>> List()
   {
